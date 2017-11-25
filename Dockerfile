@@ -1,4 +1,4 @@
-FROM debian:sid
+FROM golang:1.8-jessie
 
 # Install deps + add Chrome Stable + purge all the things
 RUN apt-get update && apt-get install -y \
@@ -12,15 +12,29 @@ RUN apt-get update && apt-get install -y \
 	&& apt-get update && apt-get install -y \
 	google-chrome-stable \
 	--no-install-recommends \
-	&& apt-get purge --auto-remove -y curl gnupg \
+	# && apt-get purge --auto-remove -y curl gnupg \
 	&& rm -rf /var/lib/apt/lists/*
 
+# Install Go dependencies
+RUN go get github.com/wirepair/autogcd
+RUN go get github.com/tools/godep
+
+# Copy source for the build
+ADD . /go/src
+WORKDIR /go/src
+
+# Copy vendored package
+# ADD extraction/ /go/src/extraction
+RUN godep restore
+
+# Compile source
+RUN env GOOS=linux GOARCH=amd64 go build -o server
+
 # Copy the binary server
-ADD server /server
-RUN cp /server /usr/local/bin/wappalyzer-server
+RUN cp /go/src/server /usr/local/bin/wappalyzer-server
 
 # Copy the JS files
-ADD extraction/js/ extraction/js/
+# RUN cp /go/src/extraction/js/* extraction/js
 
 EXPOSE 3001
 

@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hunter-io/docker-wappalyzer-api/extraction"
+	"extraction"
 	"github.com/wirepair/autogcd"
 )
 

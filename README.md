@@ -3,16 +3,24 @@ docker-wappalyzer-api
 
 This repository contains a dockerized and 'API-fied' version of [Wappalyzer](https://github.com/AliasIO/Wappalyzer). It aims to make it available through an API endpoint you can call from anywhere. It uses Chrome Headless as execution engine and is built in Go.
 
-## To build it:
-```
-env GOOS=linux GOARCH=amd64 go build -o server
+Forked from [hunter-io/docker-wappalyzer-api](https://github.com/hunter-io/docker-wappalyzer-api) to remove local
+build step (which depends on Go) and fully dockerize.
 
-docker build hunter-io/wappalyzer-api
+## To build it:
+Clone the repo:
+```
+git clone git@github.com:jschnurr/docker-wappalyzer-api.git
+```
+
+Build a local docker image:
+```bash
+cd docker-wappalyzer-api
+docker build -t wappalyzer-api .
 ```
 
 ## To run it:
 ```
-docker run --name wappalyzer-api --rm -p 3001:3001 hunter-io/wappalyzer-api
+docker run --name wappalyzer-api --rm -p 3001:3001 wappalyzer-api
 ```
 
 ## To use it:
